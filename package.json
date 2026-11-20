@@ -1,0 +1,19 @@
+{
+  "name": "macrasms",
+  "version": "1.0.0",
+  "description": "Official Node.js SDK for the MacraSMS bulk SMS API (Kenya)",
+  "main": "src/index.js",
+  "module": "src/index.mjs",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": { "types": "./src/index.d.ts", "import": "./src/index.mjs", "require": "./src/index.js" }
+  },
+  "files": ["src", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": { "test": "node --test test/*.test.js" },
+  "keywords": ["sms", "bulk sms", "kenya", "macrasms", "sms api", "otp"],
+  "author": "Macra Systems <info@macrasystems.com>",
+  "license": "MIT",
+  "homepage": "https://macrasms.com/api-docs/",
+  "repository": { "type": "git", "url": "https://github.com/macrasystems-star/macrasms-node.git" }
+}

@@ -6,7 +6,8 @@ Official Node.js SDK for [MacraSMS](https://macrasms.com), bulk SMS for Kenyan b
 
 1. Create an account at [sms.macrasms.com](https://sms.macrasms.com/signup/) and buy credits (from KES 1 by M-Pesa or card).
 2. Apply for your own sender ID on the **Sender IDs** page. Once it is approved you get an **API key** for it. The API works with your own approved sender ID, not the shared Macra one.
-3. Keep the API key secret: load it from an environment variable, never commit it.
+3. Want to try it first? Use your free sandbox test key (see [Testing with the sandbox](#testing-with-the-sandbox)); no sender ID or credits needed.
+4. Keep the API key secret: load it from an environment variable, never commit it.
 
 ## Install
 
@@ -34,6 +35,25 @@ console.log((await sms.messageStatus(result.messageId)).status);
 ```
 
 With CommonJS: `const { Client } = require('macrasms');`
+
+## Testing with the sandbox
+
+Every MacraSMS account has a free **test key** (it starts with `test_`) on the [Developer Sandbox](https://sms.macrasms.com/sandbox/) page, available right after sign up, before your sender ID is approved. Use it in place of your API key: this library works exactly the same, but no SMS is sent and no real credit is used. Test sends come out of a separate sandbox balance of 1,000 credits that you can reset at any time, and you can use any sender ID of 3 to 11 letters or numbers.
+
+```js
+const sms = new Client('MYCOMPANY', process.env.MACRASMS_TEST_KEY);   // test_...
+const result = await sms.send(['0712345678', '254700000001'], 'Testing my integration');
+// a few seconds later: (await sms.messageStatus(result.messageId)).status === 'partial'
+```
+
+| Test number | Result |
+|---|---|
+| `254700000001` | This recipient fails (alone: `failed`, with others: `partial`) |
+| `254700000402` | Refused with 402, raises the insufficient balance error |
+| `254700000429` | Refused with 429, raises the rate limit error |
+| Any other number | Succeeds, status becomes `sent` after about 3 seconds |
+
+To go live, swap the test key for the API key of your approved sender ID. Details: [API docs, Sandbox](https://macrasms.com/api-docs/#sandbox).
 
 ## Handling errors
 
